@@ -5,8 +5,8 @@
 
 boolean buzzerState = false;
 
-int buttonState = 0;
-int buttonNextState = 0;
+int buttonState = HIGH;
+int buttonNextState = HIGH;
 int vibrationState = 0;
 int gasState = 0;
 
@@ -36,23 +36,30 @@ void button() {
     buttonNextState = digitalRead(buttonPin);
     //buttonState == LOW = กดswitch 
     
-    if(buttonState == LOW) {
-        if(buttonNextState == HIGH) {
-             buttonState = HIGH;
+//    if(buttonState == LOW) {
+//        if(buttonNextState == HIGH) {
+//             buttonState = HIGH;
+//        }
+//    } else if(buttonState == HIGH) {
+//      if(buttonNextState == LOW) {
+//             buttonState = LOW;
+//             buzzerState = !buzzerState;
+//      }
+//    }
+
+    if(buttonState != buttonNextState) {
+        buttonState = buttonNextState;
+        if(buttonState == LOW) {
+          buzzerState = !buzzerState;
         }
-    } else if(buttonState == HIGH) {
-      if(buttonNextState == LOW) {
-             buttonState = LOW;
-             buzzerState = !buzzerState;
-      }
     }
 }
     
 void vibration() {
     vibrationState = analogRead(vibrationPin);
     
-    if(vibrationState > 0) {
-        buttonState = true;
+    if(vibrationState > 1000) {
+        buzzerState = true;
     }
 }
 
@@ -60,7 +67,7 @@ void gas() {
     gasState = digitalRead(gasPin);
 
     if(gasState == HIGH) {
-        buttonState = true;
+        //buzzerState = false;
     }
 }
 
